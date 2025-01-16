@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "../components/Landing";
 import AllTools from "./AllTools";
-import Resize from "./tools/Resize";
+import Resize from "../../components/tools/Resize";
 import { Toaster } from "react-hot-toast";
 
 export default function Router() {

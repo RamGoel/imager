@@ -1,4 +1,4 @@
-import { tools } from "../lib/data";
+import { tools } from "../../lib/data";
 
 const AllTools = () => {
   return (
