@@ -19,27 +19,34 @@ const Resize = () => {
       toast.error("Please upload an image and set width and height");
       return;
     }
-    const formData = new FormData();
-    console.log(file);
-    formData.append("file", file);
+    try {
+      toast.loading("Resizing image...");
+      const formData = new FormData();
+      console.log(file);
+      formData.append("file", file);
 
-    const response = await axiosInstance.post(
-      `/resize?width=${width}&height=${height}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        responseType: "arraybuffer", // Add this to properly handle binary data
-      }
-    );
+      const response = await axiosInstance.post(
+        `/resize?width=${width}&height=${height}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          responseType: "arraybuffer", // Add this to properly handle binary data
+        }
+      );
+      toast.dismiss();
 
-    const contentType = response.headers["content-type"];
-    const blob = new Blob([response.data], { type: contentType });
+      const contentType = response.headers["content-type"];
+      const blob = new Blob([response.data], { type: contentType });
 
-    const url = URL.createObjectURL(blob);
-    console.log(url);
-    setImageSrc(url);
+      const url = URL.createObjectURL(blob);
+      console.log(url);
+      setImageSrc(url);
+    } catch {
+      toast.dismiss();
+      toast.error("Something went wrong");
+    }
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,20 +64,18 @@ const Resize = () => {
       <h1 className="text-2xl text-white font-bold mb-4">Resize</h1>
 
       <div className="flex gap-3 items-center justify-start">
+        <div className="bg-neutral-800 text-white flex items-center h-[50px] px-4 rounded-md">
+          <input type="file" onChange={handleImageChange} />
+        </div>
         <input
-          className="bg-gray-200 p-2 rounded-md"
-          type="file"
-          onChange={handleImageChange}
-        />
-        <input
-          className=" p-2 rounded-md"
+          className="bg-neutral-800 text-white h-[50px] px-4 rounded-md"
           type="number"
           placeholder="Width"
           value={width}
           onChange={(e) => setWidth(Number(e.target.value))}
         />
         <input
-          className=" p-2 rounded-md"
+          className="bg-neutral-800 text-white h-[50px] px-4 rounded-md"
           type="number"
           placeholder="Height"
           value={height}
@@ -79,7 +84,8 @@ const Resize = () => {
       </div>
 
       <button
-        className="bg-blue-500 w-[200px] text-white p-2 rounded-md"
+        disabled={!uploadedImage || !width || !height}
+        className="bg-blue-500 w-[200px] disabled:opacity-50 disabled:cursor-not-allowed text-white p-2 rounded-md"
         onClick={handleResize}
       >
         Resize
