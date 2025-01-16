@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <input type="file" id="file">
+    <button id="button">
+        Resize
+    </button>
+
+    <script>
+        document.getElementById("button").addEventListener("click", () => {
+            const file = document.getElementById("file").files[0];
+            console.log(file);
+            const formData = new FormData();
+            formData.append("file", file);
+            fetch("http://localhost:8000/resize?width=100&height=100", {
+                method: "POST",
+                body: formData
+            }).then(res => res.blob()).then(blob => {
+                console.log(blob);
+                const url = URL.createObjectURL(blob);
+                const img = document.createElement("img");
+                console.log(url);
+                img.src = url;
+                document.body.appendChild(img);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -8,7 +8,7 @@ import io
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",
+    "http://localhost:3000",
     "http://127.0.0.1:5500",
 ]
 
@@ -23,14 +23,15 @@ app.add_middleware(
 @app.post("/resize")
 async def resize_image(
     file: UploadFile = File(...),
-    width: int = None,
-    height: int = None
+    width: int = Query(default=None),
+    height: int = Query(default=None)
 ):
     # Validate file type
     if not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="File must be an image")
     
 
+    print(width, height)
     try:
         # Read the image
         image_data = await file.read()
@@ -49,6 +50,7 @@ async def resize_image(
             new_height = height
             new_width = int(height * aspect_ratio)
         
+        print(new_width, new_height)
         # Resize image
         resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
         
