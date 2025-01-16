@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from PIL import Image
 import io
+from rembg import remove
 
 app = FastAPI()
 
@@ -50,5 +51,33 @@ async def resize_image(
             media_type=file.content_type
         )
         
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post('/remove-bg')
+async def removeImageBg(    
+    file: UploadFile = File(...),
+):
+     # Validate file type
+    if not file.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    
+
+    try:
+        # Read the image
+        image_data = await file.read()
+        img = Image.open(io.BytesIO(image_data))
+        
+        output_image = remove(img)
+
+        img_byte_arr = io.BytesIO()
+        output_image.save(img_byte_arr, format=img.format)
+        img_byte_arr = img_byte_arr.getvalue()
+
+
+        return Response(
+            content=img_byte_arr,
+            media_type=file.content_type
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

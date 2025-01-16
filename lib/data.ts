@@ -1,4 +1,4 @@
-import { Expand } from "lucide-react";
+import { Expand, ImageOff } from "lucide-react";
 
 export interface Tool {
   name: string;
@@ -13,5 +13,11 @@ export const tools: Tool[] = [
     description: "Resize your image to any size",
     slug: "resize",
     icon: Expand,
+  },
+  {
+    name: "Remove Background",
+    description: "Remove the background of your image",
+    slug: "remove-bg",
+    icon: ImageOff,
   },
 ];
