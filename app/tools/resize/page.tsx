@@ -60,8 +60,9 @@ const Resize = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3">
-      <h1 className="text-2xl text-white font-bold mb-4">Resize</h1>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-2xl text-white font-bold">Resize Image</h1>
+      <hr className="opacity-40" />
 
       <div className="flex gap-3 items-center justify-start">
         <div className="bg-neutral-800 text-white flex items-center h-[50px] px-4 rounded-md">
