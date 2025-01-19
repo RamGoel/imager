@@ -71,7 +71,7 @@ async def removeImageBg(
         output_image = remove(img)
 
         img_byte_arr = io.BytesIO()
-        output_image.save(img_byte_arr, format=img.format)
+        output_image.save(img_byte_arr, format='PNG')
         img_byte_arr = img_byte_arr.getvalue()
 
 
@@ -80,4 +80,5 @@ async def removeImageBg(
             media_type=file.content_type
         )
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))

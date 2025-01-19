@@ -43,6 +43,9 @@ const Resize = () => {
       const url = URL.createObjectURL(blob);
       console.log(url);
       setImageSrc(url);
+      setUploadedImage(null);
+      setWidth(0);
+      setHeight(0);
     } catch {
       toast.dismiss();
       toast.error("Something went wrong");
@@ -66,13 +69,13 @@ const Resize = () => {
 
       <div className="flex gap-3 items-center justify-start">
         <div className="bg-neutral-800 text-white flex items-center h-[50px] px-4 rounded-md">
-          <input type="file" onChange={handleImageChange} />
+          <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
         <input
           className="bg-neutral-800 text-white h-[50px] px-4 rounded-md"
           type="number"
-          placeholder="Width"
           value={width}
+          placeholder="Width"
           onChange={(e) => setWidth(Number(e.target.value))}
         />
         <input
@@ -93,13 +96,26 @@ const Resize = () => {
       </button>
 
       {imageSrc && (
-        <Image
-          width={300}
-          height={300}
-          src={imageSrc}
-          alt="Resized Image"
-          className="mt-3 object-cover"
-        />
+        <div>
+          <Image
+            width={300}
+            height={300}
+            src={imageSrc}
+            alt="Resized Image"
+            className="mt-3 object-cover"
+          />
+          <button
+            onClick={() => {
+              const a = document.createElement("a");
+              a.href = imageSrc;
+              a.download = "resized.png";
+              a.click();
+            }}
+            className="bg-red-500 text-white p-2 rounded-md"
+          >
+            Download
+          </button>
+        </div>
       )}
     </div>
   );
